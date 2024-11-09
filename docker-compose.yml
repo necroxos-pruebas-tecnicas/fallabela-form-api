@@ -1,4 +1,4 @@
-version: '3'
+name: form-ms-dev
 
 services:
   forms-db:
@@ -13,3 +13,18 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123456
       - POSTGRES_DB=forms-db
+
+  forms-ms:
+    build: ./
+    image: forms-ms
+    volumes:
+      - ./src:/usr/src/app/src
+    ports:
+      # SERVER:DOCKER
+      - 3001:3001
+    command: npm run compose:start
+    environment:
+      - PORT=3001
+      - DATABASE_URL=postgresql://postgres:123456@forms-db:5432/forms-db?schema=public
+    depends_on:
+      - forms-db
