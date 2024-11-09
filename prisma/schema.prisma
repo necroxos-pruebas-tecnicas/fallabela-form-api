@@ -12,3 +12,66 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+enum FieldType {
+  text
+  email
+  date
+  textarea
+  select
+}
+
+model Form {
+  id String @id @default(uuid())
+
+  name        String
+  description String
+  enabled     Boolean @default(true)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  fields Field[]
+}
+
+model Field {
+  id String @id @default(uuid())
+
+  name         String
+  label        String
+  type         FieldType @default(text)
+  required     Boolean   @default(false)
+  defaultValue String?
+
+  values  FieldValue[]
+  answers Answer[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Form   Form?   @relation(fields: [formId], references: [id])
+  formId String?
+}
+
+model FieldValue {
+  id String @id @default(uuid())
+
+  value String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Field   Field?  @relation(fields: [fieldId], references: [id])
+  fieldId String?
+}
+
+model Answer {
+  id Int @id @default(autoincrement())
+
+  value String
+
+  Field   Field?  @relation(fields: [fieldId], references: [id])
+  fieldId String?
+
+  createdAt DateTime @default(now())
+}
