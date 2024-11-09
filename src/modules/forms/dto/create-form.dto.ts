@@ -8,7 +8,7 @@ import {
 } from 'class-validator';
 import { FieldsDto } from './fields.dto';
 
-export class CreateFromDto {
+export class CreateFormDto {
   @IsDefined()
   @IsString()
   name: string;

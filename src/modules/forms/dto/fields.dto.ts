@@ -6,7 +6,7 @@ import {
   IsOptional,
   IsString,
 } from 'class-validator';
-import { ETypes } from '../enums';
+import { FieldType } from '@prisma/client';
 
 export class FieldsDto {
   @IsDefined()
@@ -17,10 +17,10 @@ export class FieldsDto {
   @IsString()
   label: string;
 
-  @IsEnum(ETypes, {
-    message: `Valid status are: ${Object.values(ETypes)}`,
+  @IsEnum(FieldType, {
+    message: `Valid status are: ${Object.values(FieldType)}`,
   })
-  type: ETypes;
+  type: FieldType;
 
   @IsDefined()
   @Transform(({ value }) => [1, '1', true, 'true'].includes(value))
