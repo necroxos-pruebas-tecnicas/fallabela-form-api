@@ -39,14 +39,11 @@ export class FormsService extends PrismaClient implements OnModuleInit {
     });
   }
 
-  findAll(queryParam: SearchFormDto) {
+  findAll({ value }: SearchFormDto) {
     return this.form.findMany({
-      ...(queryParam && {
+      ...(value && {
         where: {
-          OR: [
-            { name: { contains: queryParam.name } },
-            { id: { contains: queryParam.name } },
-          ],
+          OR: [{ name: { contains: value } }, { id: { contains: value } }],
         },
       }),
       include: {
