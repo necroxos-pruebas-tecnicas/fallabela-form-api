@@ -43,7 +43,11 @@ export class FormsService extends PrismaClient implements OnModuleInit {
     return this.form.findMany({
       ...(value && {
         where: {
-          OR: [{ name: { contains: value } }, { id: { contains: value } }],
+          OR: [
+            { id: { contains: value } },
+            { name: { contains: value } },
+            { description: { contains: value } },
+          ],
         },
       }),
       include: {
