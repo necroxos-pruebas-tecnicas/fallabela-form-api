@@ -1,6 +1,7 @@
 import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
 import { CreateFormDto } from './dto/create-form.dto';
 import { PrismaClient } from '@prisma/client';
+import { SearchFormDto } from './dto';
 
 @Injectable()
 export class FormsService extends PrismaClient implements OnModuleInit {
@@ -38,8 +39,16 @@ export class FormsService extends PrismaClient implements OnModuleInit {
     });
   }
 
-  findAll() {
+  findAll(queryParam: SearchFormDto) {
     return this.form.findMany({
+      ...(queryParam && {
+        where: {
+          OR: [
+            { name: { contains: queryParam.name } },
+            { id: { contains: queryParam.name } },
+          ],
+        },
+      }),
       include: {
         fields: {
           include: { values: true },

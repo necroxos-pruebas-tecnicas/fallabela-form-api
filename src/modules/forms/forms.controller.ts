@@ -1,6 +1,7 @@
-import { Controller, Get, Post, Body, Param } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Query } from '@nestjs/common';
 import { FormsService } from './forms.service';
 import { CreateFormDto } from './dto/create-form.dto';
+import { SearchFormDto } from './dto';
 
 @Controller('forms')
 export class FormsController {
@@ -12,8 +13,8 @@ export class FormsController {
   }
 
   @Get()
-  findAll() {
-    return this.formsService.findAll();
+  findAll(@Query() queryParam: SearchFormDto) {
+    return this.formsService.findAll(queryParam);
   }
 
   @Get(':id')
