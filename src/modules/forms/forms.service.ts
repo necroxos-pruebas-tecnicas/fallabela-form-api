@@ -1,21 +1,16 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateFormDto } from './dto/create-form.dto';
-import { PrismaClient } from '@prisma/client';
 import { SearchFormDto } from './dto';
+import { PrismaService } from '../../services/prisma.service';
 
 @Injectable()
-export class FormsService extends PrismaClient implements OnModuleInit {
-  private readonly logger = new Logger(FormsService.name);
-
-  async onModuleInit() {
-    await this.$connect();
-    this.logger.log('Database connected!');
-  }
+export class FormsService {
+  constructor(private readonly prisma: PrismaService) {}
 
   async create(createFromDto: CreateFormDto) {
     const { fields, ...form } = createFromDto;
 
-    return this.form.create({
+    return this.prisma.form.create({
       data: {
         name: form.name,
         description: form.description,
@@ -40,7 +35,7 @@ export class FormsService extends PrismaClient implements OnModuleInit {
   }
 
   findAll({ value }: SearchFormDto) {
-    return this.form.findMany({
+    return this.prisma.form.findMany({
       ...(value && {
         where: {
           OR: [
@@ -59,7 +54,7 @@ export class FormsService extends PrismaClient implements OnModuleInit {
   }
 
   findOne(id: string) {
-    return this.form.findFirst({
+    return this.prisma.form.findFirst({
       where: { id },
       include: {
         fields: {

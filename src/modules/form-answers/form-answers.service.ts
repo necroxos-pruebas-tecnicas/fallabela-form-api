@@ -1,30 +1,27 @@
-import { Injectable, Logger, OnModuleInit } from '@nestjs/common';
-import { CreateFormAnswersDto } from './dto/create-form-answer.dto';
-import { PrismaClient } from '@prisma/client';
+import { Injectable } from '@nestjs/common';
+import { CreateFormAnswersDto } from './dto';
+import { PrismaService } from '../../services/prisma.service';
 
 @Injectable()
-export class FormAnswersService extends PrismaClient implements OnModuleInit {
-  private readonly logger = new Logger(FormAnswersService.name);
-
-  async onModuleInit() {
-    await this.$connect();
-    this.logger.log('Database connected!');
-  }
+export class FormAnswersService {
+  constructor(private readonly prisma: PrismaService) {}
 
   create({ answers }: CreateFormAnswersDto) {
-    return this.answer.createMany({
+    return this.prisma.answer.createMany({
       data: answers,
     });
   }
 
   async findByForm(formId: string) {
-    const form = await this.form.findFirst({
-      where: { id: formId },
-      include: { fields: true },
+    const fields = await this.prisma.field.findMany({
+      where: { formId: formId },
+      select: { id: true },
     });
 
-    const fieldIds = form.fields.map((field) => field.id);
+    const fieldIds = fields.map(({ id }) => id);
 
-    return this.answer.findMany({ where: { fieldId: { in: fieldIds } } });
+    return this.prisma.answer.findMany({
+      where: { fieldId: { in: fieldIds } },
+    });
   }
 }
