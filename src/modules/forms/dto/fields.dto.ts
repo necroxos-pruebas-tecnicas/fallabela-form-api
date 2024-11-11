@@ -33,5 +33,5 @@ export class FieldsDto {
   values: string[];
 
   @IsOptional()
-  defaultValue: string;
+  defaultValue?: string;
 }

@@ -1,6 +1,6 @@
 import { Controller, Get, Post, Body, Param } from '@nestjs/common';
 import { FormAnswersService } from './form-answers.service';
-import { CreateFormAnswersDto } from './dto/create-form-answer.dto';
+import { CreateFormAnswersDto } from './dto';
 
 @Controller('form-answers')
 export class FormAnswersController {
