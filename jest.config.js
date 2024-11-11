@@ -14,10 +14,11 @@ module.exports = {
     '!src/main.ts',
     '!**/index.ts',
     '!**/__tests__/**',
-    '!**/submodule/validators/**',
-    '!**/*.constants.ts',
+    '!**/constants/**',
     '!**/dto/**',
     '!**/enums/**',
     '!**/interfaces/**',
+    '!**/*.module.ts',
+    '!**/envs.ts',
   ],
 };
